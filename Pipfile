@@ -13,16 +13,17 @@ name = "pypi"
 
 dj-database-url = "==0.5.0"
 dj-static = "==0.0.6"
-Django = "==1.11.10"
+django = "*"
 django-heroku = "==0.3.1"
 django-toolbelt = "==0.0.1"
-djangorestframework = "==3.7.7"
+djangorestframework = "*"
 gunicorn = "==19.7.1"
 "psycopg2" = "==2.7.4"
-Pygments = "==2.2.0"
+pygments = "*"
 pytz = "==2018.3"
 "static3" = "==0.7.0"
 whitenoise = "==3.3.1"
+coreapi = "*"
 
 
 [requires]
