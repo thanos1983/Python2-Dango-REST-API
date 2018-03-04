@@ -24,6 +24,7 @@ pytz = "==2018.3"
 "static3" = "==0.7.0"
 whitenoise = "==3.3.1"
 coreapi = "*"
+"psycopg2-binary" = "*"
 
 
 [requires]
