@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7b7d4d23-9a1d-45a5-b8d7-9a8d126f55a9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
     </list>
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,7 +86,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="64" />
+    <option name="x" value="1984" />
     <option name="y" value="-1091" />
     <option name="width" value="1857" />
     <option name="height" value="1092" />
@@ -186,7 +185,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-1091" width="1857" height="1092" extended-state="6" />
+    <frame x="1984" y="-1091" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
