@@ -22,18 +22,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '1r)pc!%kwd4s7fxx%dj&1^^9eprxe$fd0j=+en2cu(x4ykk1i$'
 
-'''if socket.gethostname() == "server_name":
+if socket.gethostname() == "server_name":
     DEBUG = False
     ALLOWED_HOSTS = ['*']
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1",]'''
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1",]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -130,9 +130,6 @@ USE_TZ = True
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
