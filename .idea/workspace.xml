@@ -2,6 +2,108 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b7d4d23-9a1d-45a5-b8d7-9a8d126f55a9" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/base.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/changelists.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/dashboard.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/fonts.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/forms.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/login.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/rtl.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/css/widgets.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/fonts/LICENSE.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/fonts/README.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/fonts/Roboto-Bold-webfont.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/fonts/Roboto-Light-webfont.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/fonts/Roboto-Regular-webfont.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/LICENSE" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/README.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/calendar-icons.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/gis/move_vertex_off.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/gis/move_vertex_on.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-addlink.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-alert.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-calendar.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-changelink.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-clock.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-deletelink.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-no.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-unknown-alt.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-unknown.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/icon-yes.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/inline-delete.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/search.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/selector-icons.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/sorting-icons.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/tooltag-add.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/img/tooltag-arrowright.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/SelectBox.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/SelectFilter2.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/actions.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/actions.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/admin/DateTimeShortcuts.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/admin/RelatedObjectLookups.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/calendar.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/cancel.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/change_form.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/collapse.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/collapse.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/core.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/inlines.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/inlines.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/jquery.init.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/popup_response.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/prepopulate.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/prepopulate.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/prepopulate_init.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/timeparse.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/urlify.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/jquery/LICENSE-JQUERY.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/jquery/jquery.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/jquery/jquery.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/xregexp/LICENSE-XREGEXP.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/xregexp/xregexp.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/admin/js/vendor/xregexp/xregexp.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/css/bootstrap-tweaks.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/css/bootstrap.min.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/css/default.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/css/prettify.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/base.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/bootstrap-theme.min.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/bootstrap.min.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/font-awesome-4.0.3.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/highlight.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/css/jquery.json-view.min.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/fontawesome-webfont.eot" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/fontawesome-webfont.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/fontawesome-webfont.ttf" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/fontawesome-webfont.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/glyphicons-halflings-regular.eot" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/glyphicons-halflings-regular.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/glyphicons-halflings-regular.ttf" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/glyphicons-halflings-regular.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/fonts/glyphicons-halflings-regular.woff2" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/img/favicon.ico" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/img/grid.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/api.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/bootstrap.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/highlight.pack.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/jquery-1.10.2.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/docs/js/jquery.json-view.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/fonts/glyphicons-halflings-regular.eot" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/fonts/glyphicons-halflings-regular.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/fonts/glyphicons-halflings-regular.ttf" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/fonts/glyphicons-halflings-regular.woff" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/fonts/glyphicons-halflings-regular.woff2" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/img/glyphicons-halflings-white.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/img/glyphicons-halflings.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/img/grid.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/ajax-form.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/bootstrap.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/coreapi-0.1.1.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/csrf.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/default.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/jquery-1.12.4.min.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/static/rest_framework/js/prettify-min.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/thanosTest/settings.py" afterPath="$PROJECT_DIR$/thanosTest/settings.py" />
     </list>
@@ -17,8 +119,8 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/thanosTest/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="136" column="36" lean-forward="false" selection-start-line="136" selection-start-column="36" selection-end-line="136" selection-end-column="36" />
+            <state relative-caret-position="264">
+              <caret line="128" column="59" lean-forward="false" selection-start-line="128" selection-start-column="59" selection-end-line="128" selection-end-column="59" />
               <folding>
                 <element signature="e#315#324#0" expanded="true" />
               </folding>
@@ -272,6 +374,7 @@
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -284,7 +387,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -317,7 +419,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/env/local/lib/python2.7/site-packages/django/conf/urls/__init__.py" />
     <entry file="file://$PROJECT_DIR$/env/local/lib/python2.7/site-packages/django/urls/resolvers.py" />
     <entry file="file:///usr/lib/python2.7/importlib/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -642,10 +743,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/static/js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/thanosTest/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="136" column="36" lean-forward="false" selection-start-line="136" selection-start-column="36" selection-end-line="136" selection-end-column="36" />
+        <state relative-caret-position="264">
+          <caret line="128" column="59" lean-forward="false" selection-start-line="128" selection-start-column="59" selection-end-line="128" selection-end-column="59" />
           <folding>
             <element signature="e#315#324#0" expanded="true" />
           </folding>
