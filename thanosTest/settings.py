@@ -24,11 +24,11 @@ SECRET_KEY = '1r)pc!%kwd4s7fxx%dj&1^^9eprxe$fd0j=+en2cu(x4ykk1i$'
 
 if socket.gethostname() == "server_name":
     DEBUG = False
-    ALLOWED_HOSTS = [u'*']
+    ALLOWED_HOSTS = ['*']
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1",]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", 'test-basic-version.herokuapp.com']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
