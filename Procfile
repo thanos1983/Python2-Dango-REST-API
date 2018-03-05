@@ -1,1 +1,1 @@
-web: gunicorn heroku_blog.wsgi
+web: gunicorn test-basic-version.wsgi
