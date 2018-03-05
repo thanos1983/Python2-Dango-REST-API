@@ -1,1 +1,1 @@
-web: gunicorn test-basic-version.wsgi
+web: gunicorn thanosTest.wsgi
