@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b7d4d23-9a1d-45a5-b8d7-9a8d126f55a9" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/thanosTest/settings.py" afterPath="$PROJECT_DIR$/thanosTest/settings.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,7 +18,7 @@
         <entry file="file://$PROJECT_DIR$/thanosTest/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="372">
-              <caret line="134" column="11" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="139" selection-end-column="1" />
+              <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
               <folding>
                 <element signature="e#315#324#0" expanded="true" />
               </folding>
@@ -658,7 +659,7 @@
     <entry file="file://$PROJECT_DIR$/thanosTest/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="372">
-          <caret line="134" column="11" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="139" selection-end-column="1" />
+          <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
           <folding>
             <element signature="e#315#324#0" expanded="true" />
           </folding>

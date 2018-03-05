@@ -24,7 +24,7 @@ SECRET_KEY = '1r)pc!%kwd4s7fxx%dj&1^^9eprxe$fd0j=+en2cu(x4ykk1i$'
 
 if socket.gethostname() == "server_name":
     DEBUG = False
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = [u'*']
 
 else:
     DEBUG = True
