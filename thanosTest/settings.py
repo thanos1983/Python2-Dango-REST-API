@@ -138,3 +138,24 @@ STATICFILES_DIRS = (
     ("images", os.path.join(STATIC_ROOT, 'images')),
     ("fonts", os.path.join(STATIC_ROOT, 'fonts')),
 )
+
+# 'filename': STATIC_ROOT + "/logging/debug.log",
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': STATIC_ROOT + "/logging/debug.log",
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
