@@ -4,6 +4,13 @@ from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from thanosTest import settings
+from modications import TextFieldAppend
+
+CHARACTER_CHOICES = (
+    (u"\u00AE", 'Registered Sign: ' + u"\u00AE"),
+    (u"\u00A9", 'Copyright Sign: ' + u"\u00A9")
+)
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -18,8 +25,13 @@ class Snippet(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     code = models.TextField()
     linenos = models.BooleanField(default=False)
-    language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
-    style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
+    language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
+    character = models.CharField(choices=CHARACTER_CHOICES, default=u"\u00AE", max_length=100)
+    style = models.CharField(choices=STYLE_CHOICES, default='emacs', max_length=100)
+
+    # create instance of the class with the variable list
+    key_words_path = TextFieldAppend(settings.KEY_WORDS_ROOT)
+    print(key_words_path)
 
     def save(self, *args, **kwargs):
         """

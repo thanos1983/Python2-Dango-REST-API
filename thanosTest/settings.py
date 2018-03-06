@@ -130,6 +130,7 @@ USE_TZ = True
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+KEY_WORDS_ROOT = os.path.join(PROJECT_ROOT, 'static/keywords/keywords.txt')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -141,7 +142,7 @@ STATICFILES_DIRS = (
 
 # 'filename': STATIC_ROOT + "/logging/debug.log",
 
-LOGGING = {
+'''LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -158,4 +159,21 @@ LOGGING = {
             'propagate': True,
         },
     },
+}'''
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
 }
+

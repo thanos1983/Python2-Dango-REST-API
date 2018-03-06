@@ -1,0 +1,5 @@
+Oracle
+Unicode
+Microsoft
+SAP
+Unicode
