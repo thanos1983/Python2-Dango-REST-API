@@ -44,10 +44,27 @@ class UserDetail(generics.RetrieveAPIView):
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
 
+    def post(self, request, filename, format=None):
+        file_obj = request.data['file']
+        # up_file = request.FILES['file']
+        '''with open('/Users/Username/' + up_file.name, 'wb+') \
+                as destination:
+            destination.write(file_obj.name)'''
+        '''destination = open('/Users/Username/' + up_file.name, 'wb+')
+        for chunk in up_file.chunks():            
+        destination.close()'''
+        print('File Name: {} and Object: {}'.format(filename, file_obj))
+        return Response(file_obj.name, status=204)
+
+        # ...
+        # do some stuff with uploaded file
+        # ...
+        # return Response(up_file.name, status.HTTP_201_CREATED)
+
     def put(self, request, filename, format=None):
         file_obj = request.data['file']
         print('File Name: {} and Object: {}'.format(filename, file_obj))
-        return Response(status=204)
+        return Response(file_obj.name, status=204)
 
 
 class SnippetList(mixins.ListModelMixin,

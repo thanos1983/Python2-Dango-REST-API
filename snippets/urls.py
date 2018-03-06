@@ -5,6 +5,7 @@ from snippets import views
 # API endpoints
 urlpatterns = format_suffix_patterns([
     url(r'^$', views.api_root),
+    # url(r'^upload/(?P<filename>[^/]+)$',
     url(r'^upload/(?P<filename>[^/]+)$',
         views.FileUploadView.as_view(),
         name='file-upload'),
