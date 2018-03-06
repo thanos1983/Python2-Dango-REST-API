@@ -28,10 +28,10 @@ class Snippet(models.Model):
     language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
     character = models.CharField(choices=CHARACTER_CHOICES, default=u"\u00AE", max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='emacs', max_length=100)
+    file = models.FileField(blank=False, null=False, default='')
 
     # create instance of the class with the variable list
     key_words_path = TextFieldAppend(settings.KEY_WORDS_ROOT)
-    print(key_words_path)
 
     def save(self, *args, **kwargs):
         """

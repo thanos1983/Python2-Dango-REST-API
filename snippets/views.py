@@ -1,3 +1,4 @@
+from __future__ import print_function
 from rest_framework import generics
 from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
@@ -5,11 +6,12 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
-from rest_framework import mixins
+from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import renderers
 from rest_framework.response import Response
+from rest_framework.parsers import FileUploadParser
 
 
 @api_view(['GET'])
@@ -37,6 +39,15 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class FileUploadView(views.APIView):
+    parser_classes = (FileUploadParser,)
+
+    def put(self, request, filename, format=None):
+        file_obj = request.data['file']
+        print('File Name: {} and Object: {}'.format(filename, file_obj))
+        return Response(status=204)
 
 
 class SnippetList(mixins.ListModelMixin,
