@@ -130,6 +130,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 LOGGING_ROOT = os.path.join(STATIC_ROOT, 'logging')
 KEY_WORDS_ROOT = os.path.join(STATIC_ROOT, 'keywords')
+FILES_ROOT = os.path.join(STATIC_ROOT, 'files')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -142,39 +143,39 @@ STATICFILES_DIRS = (
     ("keywords", os.path.join(STATIC_ROOT, 'keywords')),
 )
 
-# 'filename': STATIC_ROOT + "/logging/debug.log",
-
-'''LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': LOGGING_ROOT + "/debug.log",
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}'''
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse',
+            },
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            },
+        },
     'handlers': {
+        'fileInfo': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGING_ROOT, "info.log"),
+        },
+        'fileDebug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGING_ROOT, "debug.log")
+        },
         'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
             'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'handlers': ['console', 'fileInfo', 'fileDebug'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     },
 }

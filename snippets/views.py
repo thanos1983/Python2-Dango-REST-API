@@ -6,12 +6,14 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
+from snippets.modications import TextFieldAppend
 from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
+from thanosTest import settings
 
 
 @api_view(['GET'])
@@ -46,14 +48,9 @@ class FileUploadView(views.APIView):
 
     def post(self, request, filename, format=None):
         file_obj = request.data['file']
-        # up_file = request.FILES['file']
-        '''with open('/Users/Username/' + up_file.name, 'wb+') \
-                as destination:
-            destination.write(file_obj.name)'''
-        '''destination = open('/Users/Username/' + up_file.name, 'wb+')
-        for chunk in up_file.chunks():            
-        destination.close()'''
-        print('File Name: {} and Object: {}'.format(filename, file_obj))
+        with open(settings.FILES_ROOT + '/' + file_obj.name, 'wb+') as destination:
+            destination.write(file_obj.name)
+        # print(data)
         return Response(file_obj.name, status=204)
 
         # ...
@@ -63,8 +60,14 @@ class FileUploadView(views.APIView):
 
     def put(self, request, filename, format=None):
         file_obj = request.data['file']
-        print('File Name: {} and Object: {}'.format(filename, file_obj))
-        return Response(file_obj.name, status=204)
+        # create directory path
+        directory = settings.FILES_ROOT + '/' + str(request.user) + '/'
+        # instantiate the class and pass the path
+        path_obj = TextFieldAppend(directory)
+        # store the file for further processing and check if everything is ok
+        if path_obj.file_transfer_check_dir(filename):
+            return Response(file_obj.name, status=204)
+        return Response(file_obj.name, status=404)
 
 
 class SnippetList(mixins.ListModelMixin,
