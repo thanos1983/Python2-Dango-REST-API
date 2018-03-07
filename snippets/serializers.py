@@ -3,6 +3,16 @@ from snippets.models import Snippet
 from django.contrib.auth.models import User
 
 
+class FileUploaderSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+
+    class Meta:
+        model = Snippet
+        fields = ('url', 'id', 'highlight', 'owner',
+                  'title', 'code', 'linenos', 'language', 'character', 'style', 'file')
+
+
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
@@ -10,7 +20,7 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Snippet
         fields = ('url', 'id', 'highlight', 'owner',
-                  'title', 'code', 'linenos', 'language', 'character', 'style')
+                  'title', 'code', 'linenos', 'language', 'character', 'style', 'file')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

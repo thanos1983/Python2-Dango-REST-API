@@ -44,6 +44,8 @@ class UserDetail(generics.RetrieveAPIView):
 
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
 
     def post(self, request, filename, format=None):
         file_obj = FileProcesses(request)

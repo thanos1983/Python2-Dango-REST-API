@@ -4,6 +4,9 @@ from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from thanosTest import settings
+
+import os
 
 CHARACTER_CHOICES = (
     (u"\u00AE", 'Registered Sign: ' + u"\u00AE"),
@@ -26,6 +29,9 @@ class Snippet(models.Model):
     language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
     character = models.CharField(choices=CHARACTER_CHOICES, default=u"\u00AE", max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='emacs', max_length=100)
+    file = models.FileField(blank=False,
+                            null=False,
+                            upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'))
 
     def save(self, *args, **kwargs):
         """
