@@ -1,7 +1,4 @@
 from __future__ import print_function
-
-import os
-
 from rest_framework import generics
 from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
@@ -16,7 +13,6 @@ from rest_framework.reverse import reverse
 from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
-from thanosTest import settings
 
 
 @api_view(['GET'])

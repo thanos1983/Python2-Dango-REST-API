@@ -130,7 +130,8 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 LOGGING_ROOT = os.path.join(STATIC_ROOT, 'logging')
 KEY_WORDS_ROOT = os.path.join(STATIC_ROOT, 'keywords')
-FILES_ROOT = os.path.join(STATIC_ROOT, 'files')
+RELATIVE_ROOT = os.path.dirname(os.path.relpath(__file__))
+RELATIVE_STATIC = os.path.join(RELATIVE_ROOT, 'static')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -163,7 +164,12 @@ STATICFILES_DIRS = (
         'fileDebug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGING_ROOT, "debug.log")
+            'filename': os.path.join(LOGGING_ROOT, "debug.log"),
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_true']
         },
         'console': {
             'level': 'INFO',
