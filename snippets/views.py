@@ -4,7 +4,7 @@ from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from snippets.serializers import SnippetSerializer, FileUploaderSerializer
 from snippets.permissions import IsOwnerOrReadOnly
 from snippets.modifications import FileProcesses
 from rest_framework import mixins, views
@@ -42,14 +42,24 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
+from rest_framework import status
+
+
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
+    serializer_class = FileUploaderSerializer
 
     def post(self, request, filename, format=None):
-        file_obj = FileProcesses(request)
-        return file_obj.file_processing()
+        request.data['code'] = "print('TEST')"
+        serializer = FileUploaderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        #file_obj = FileProcesses(request)
+        # return file_obj.file_processing()
 
     def put(self, request, filename, format=None):
         file_obj = FileProcesses(request)
