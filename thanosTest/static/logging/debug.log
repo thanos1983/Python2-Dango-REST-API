@@ -1,17 +1,1 @@
-(0.000) 
-            SELECT name, type FROM sqlite_master
-            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
-            ORDER BY name; args=None
-(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
-(0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."username" = 'admin'; args=(u'admin',)
-"PUT /upload/keywords.txt HTTP/1.1" 204 14
-(0.000) 
-            SELECT name, type FROM sqlite_master
-            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
-            ORDER BY name; args=None
-(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
-(0.000) 
-            SELECT name, type FROM sqlite_master
-            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
-            ORDER BY name; args=None
-(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+
