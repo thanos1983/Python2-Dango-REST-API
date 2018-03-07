@@ -20,7 +20,7 @@ class Snippet(models.Model):
     highlighted = models.TextField()
 
     created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
+    title = models.CharField(max_length=100, blank=True, default='Default Title')
     code = models.TextField()
     linenos = models.BooleanField(default=False)
     language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
