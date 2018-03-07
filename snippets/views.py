@@ -1,4 +1,7 @@
 from __future__ import print_function
+
+import os
+
 from rest_framework import generics
 from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
@@ -6,7 +9,7 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
-from snippets.modications import TextFieldAppend
+from snippets.modifications import FileProcesses
 from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
@@ -48,24 +51,27 @@ class FileUploadView(views.APIView):
 
     def post(self, request, filename, format=None):
         file_obj = request.data['file']
-        with open(settings.FILES_ROOT + '/' + file_obj.name, 'wb+') as destination:
-            destination.write(file_obj.name)
-        # print(data)
-        return Response(file_obj.name, status=204)
-
-        # ...
-        # do some stuff with uploaded file
-        # ...
-        # return Response(up_file.name, status.HTTP_201_CREATED)
+        # create directory path
+        directory = os.path.join(settings.FILES_ROOT, str(request.user))
+        # instantiate the class and pass the path
+        file_process = FileProcesses(directory)
+        # create directory if does not exist
+        file_process.create_dir_if_not_exist()
+        # received file store and check if is located
+        if file_process.store_file_in_dir(filename):
+            return Response(file_obj.name, status=204)
+        return Response(file_obj.name, status=404)
 
     def put(self, request, filename, format=None):
         file_obj = request.data['file']
         # create directory path
-        directory = settings.FILES_ROOT + '/' + str(request.user) + '/'
+        directory = os.path.join(settings.FILES_ROOT, str(request.user))
         # instantiate the class and pass the path
-        path_obj = TextFieldAppend(directory)
-        # store the file for further processing and check if everything is ok
-        if path_obj.file_transfer_check_dir(filename):
+        file_process = FileProcesses(directory)
+        # create directory if does not exist
+        file_process.create_dir_if_not_exist()
+        # received file store and check if is located
+        if file_process.store_file_in_dir(filename):
             return Response(file_obj.name, status=204)
         return Response(file_obj.name, status=404)
 
