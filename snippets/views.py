@@ -50,30 +50,12 @@ class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
 
     def post(self, request, filename, format=None):
-        file_obj = request.data['file']
-        # create directory path
-        directory = os.path.join(settings.FILES_ROOT, str(request.user))
-        # instantiate the class and pass the path
-        file_process = FileProcesses(directory)
-        # create directory if does not exist
-        file_process.create_dir_if_not_exist()
-        # received file store and check if is located
-        if file_process.store_file_in_dir(filename):
-            return Response(file_obj.name, status=204)
-        return Response(file_obj.name, status=404)
+        file_obj = FileProcesses(request)
+        return file_obj.file_processing()
 
     def put(self, request, filename, format=None):
-        file_obj = request.data['file']
-        # create directory path
-        directory = os.path.join(settings.FILES_ROOT, str(request.user))
-        # instantiate the class and pass the path
-        file_process = FileProcesses(directory)
-        # create directory if does not exist
-        file_process.create_dir_if_not_exist()
-        # received file store and check if is located
-        if file_process.store_file_in_dir(filename):
-            return Response(file_obj.name, status=204)
-        return Response(file_obj.name, status=404)
+        file_obj = FileProcesses(request)
+        return file_obj.file_processing()
 
 
 class SnippetList(mixins.ListModelMixin,
