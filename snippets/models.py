@@ -8,6 +8,7 @@ from thanosTest import settings
 
 import os
 
+# tuple of character(s)
 CHARACTER_CHOICES = (
     (u"\u00AE", 'Registered Sign: ' + u"\u00AE"),
     (u"\u00A9", 'Copyright Sign: ' + u"\u00A9")
@@ -19,31 +20,48 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
 class Snippet(models.Model):
+    # This is the user of the text
     owner = models.ForeignKey('auth.User',
                               related_name='snippets',
                               on_delete=models.CASCADE)
+    # Highlighted url (nice output)
     highlighted = models.TextField()
 
+    # timestamp of the moment of the action
     created = models.DateTimeField(auto_now_add=True)
+
+    # optional title of the text
     title = models.CharField(max_length=100,
                              blank=True,
                              default='Default Title',
                              help_text='Choose Text Title (Optional)')
+
+    # text to be updated
     code = models.TextField(help_text='Insert Here the Text to Format')
+
+    # line number on highlighted url
     linenos = models.BooleanField(default=False,
                                   help_text='Add Line Numbers in Viewing Highlighted url Link (Optional)')
+
+    # choice of programing language for the highlighted url view
     language = models.CharField(choices=LANGUAGE_CHOICES,
                                 default='Python',
                                 max_length=100,
                                 help_text='Choose Programming Language in Viewing the Highlighted url Link (Optional)')
+
+    # choice of characters to replace
     character = models.CharField(choices=CHARACTER_CHOICES,
                                  default=u"\u00AE",
                                  max_length=100,
                                  help_text='Choose Character to Replace')
+
+    # another option of character representation on highlighted view
     style = models.CharField(choices=STYLE_CHOICES,
                              default='emacs',
                              max_length=100,
                              help_text='Choose Flavor of Text Editor in Viewing the Highlighted url Link (Optional)')
+
+    # file to load that contains the lines
     file = models.FileField(blank=False,
                             null=False,
                             upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'),
@@ -63,4 +81,5 @@ class Snippet(models.Model):
         super(Snippet, self).save(*args, **kwargs)
 
     class Meta:
+        # in which order to store the objects
         ordering = ('created',)
