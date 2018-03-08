@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 
 
+# GET to be called when user is or not logged in url <ip>:<port>
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
@@ -22,6 +23,7 @@ def api_root(request, format=None):
     })
 
 
+# class to be called when user is sending POST / PUT requests through url <ip>:<port>/snippets/(?P<pk>[0-9]+)/highlight/
 class SnippetHighlight(generics.GenericAPIView):
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
@@ -31,16 +33,19 @@ class SnippetHighlight(generics.GenericAPIView):
         return Response(snippet.highlighted)
 
 
+# class to be called when user is sending POST / PUT requests through url <ip>:<port>/users/
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
+# class to be called when user is sending POST / PUT requests through url <ip>:<port>/users/(?P<pk>[0-9]+)/$
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
+# class to be called when user is sending POST / PUT requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
     queryset = Snippet.objects.all()
@@ -65,6 +70,7 @@ class FileUploadView(views.APIView):
         # return file_obj.file_processing()
 
 
+# class to be called when user is sending POST / PUT requests through url <ip>:<port>/snippets/
 class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
@@ -76,12 +82,23 @@ class SnippetList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        request.data['code'] = "print('TEST')"
+        serializer = SnippetSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    def put(self, request, *args, **kwargs):
+        request.data['code'] = "print('TEST')"
+        serializer = SnippetSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# class to be called when user is sending GET / PUT / DELETE requests through url <ip>:<port>/snippets/(?P<pk>[0-9]+)/
 class SnippetDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
