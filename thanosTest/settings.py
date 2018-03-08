@@ -164,7 +164,12 @@ STATICFILES_DIRS = (
         'fileDebug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGING_ROOT, "debug.log")
+            'filename': os.path.join(LOGGING_ROOT, "debug.log"),
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_true']
         },
         'console': {
             'level': 'INFO',

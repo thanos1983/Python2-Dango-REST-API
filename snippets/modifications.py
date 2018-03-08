@@ -1,6 +1,6 @@
 import os
 from thanosTest import settings
-from rest_framework.response import Response
+# from rest_framework.response import Response
 
 
 class FileProcesses:
@@ -14,6 +14,11 @@ class FileProcesses:
         self.request = request
         self.path = None
 
+    def request_path_modification(self, file_path):
+        # filename = self.request.data['file']
+        self.path = file_path
+        return os.path.join(settings.FILES_ROOT, str(self.request.user))
+
     def file_processing(self):
         filename = self.request.data['file']
         # create path
@@ -22,9 +27,7 @@ class FileProcesses:
         # create path if does not exist
         self.create_dir_if_not_exist()
         # received file store and check if is located
-        if self.store_file_in_dir(filename):
-            return Response(filename.name, status=201)
-        return Response(filename.name, status=404)
+        return self.store_file_in_dir(filename)
 
     def search_and_append(self):
         return self.path
@@ -43,5 +46,5 @@ class FileProcesses:
             destination.write(filename.name)
         # check if file was successfully written
         if os.path.isfile(os.path.join(self.path, filename.name)):
-            return True
-        return False
+            return os.path.join(self.path, filename.name)
+        return self.path
