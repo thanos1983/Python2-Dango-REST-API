@@ -70,7 +70,7 @@ class FileUploadView(views.APIView):
         # return file_obj.file_processing()
 
 
-# class to be called when user is sending POST / PUT requests through url <ip>:<port>/snippets/
+# class to be called when user is sending GET / POST requests through url <ip>:<port>/snippets/
 class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
@@ -82,14 +82,6 @@ class SnippetList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        request.data['code'] = "print('TEST')"
-        serializer = SnippetSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, *args, **kwargs):
         request.data['code'] = "print('TEST')"
         serializer = SnippetSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
