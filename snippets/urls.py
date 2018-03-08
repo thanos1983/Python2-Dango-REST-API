@@ -5,9 +5,8 @@ from snippets import views
 # API endpoints
 urlpatterns = format_suffix_patterns([
     url(r'^$', views.api_root),
-    url(r'^snippets/(?P<filename>[^/]+)$',
-        views.SnippetList.as_view(),
-        # views.FileUploadView.as_view(),
+    url(r'^upload/(?P<filename>[^/]+)$',
+        views.FileUploadView.as_view(),
         name='file-upload'),
     url(r'^snippets/$',
         views.SnippetList.as_view(),

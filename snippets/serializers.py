@@ -10,11 +10,7 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Snippet
         fields = ('url', 'id', 'highlight', 'owner',
-<<<<<<< HEAD
                   'title', 'code', 'linenos', 'language', 'character', 'style', 'file',)
-=======
-                  'title', 'code', 'linenos', 'language', 'character', 'style',)
->>>>>>> newFeatures/fileProcessing
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
