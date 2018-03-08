@@ -28,7 +28,7 @@ if socket.gethostname() == "server_name":
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", u'test-basic-version.herokuapp.com']
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", u'thanos-test.herokuapp.com']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
