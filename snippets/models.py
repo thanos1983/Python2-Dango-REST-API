@@ -29,9 +29,12 @@ class Snippet(models.Model):
     language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
     character = models.CharField(choices=CHARACTER_CHOICES, default=u"\u00AE", max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='emacs', max_length=100)
+<<<<<<< HEAD
     keyword = models.FileField(blank=False,
                                null=False,
                                upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'keywords'))
+=======
+>>>>>>> newFeatures/fileProcessing
     file = models.FileField(blank=False,
                             null=False,
                             upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'))
