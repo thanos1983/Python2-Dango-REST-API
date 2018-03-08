@@ -1,6 +1,6 @@
 import os
 from thanosTest import settings
-# from rest_framework.response import Response
+from django.core.files.storage import FileSystemStorage
 
 
 class FileProcesses:
@@ -12,12 +12,18 @@ class FileProcesses:
         :rtype: object
         """
         self.request = request
+        self.keywords = None
         self.path = None
 
     def request_path_modification(self, file_path):
         # filename = self.request.data['file']
         self.path = file_path
         return os.path.join(settings.FILES_ROOT, str(self.request.user))
+
+    def file_keywords(self, filename):
+        # remove processed file
+        os.remove(os.path.join(self.path, filename))
+        return self.keywords
 
     def file_processing(self):
         filename = self.request.data['file']
@@ -41,10 +47,12 @@ class FileProcesses:
             os.makedirs(self.path)
 
     def store_file_in_dir(self, filename):
-        # Read binary file and write data in dir
-        with open(os.path.join(self.path, filename.name), 'wb+') as destination:
-            destination.write(filename.name)
+        # store file in allocated dir based on user
+        fs = FileSystemStorage(location=self.path)
+        fs.save(filename.name, filename)
         # check if file was successfully written
         if os.path.isfile(os.path.join(self.path, filename.name)):
-            return os.path.join(self.path, filename.name)
-        return self.path
+            with open(os.path.join(self.path, filename.name)) as f:
+                lines = filter(None, (line.rstrip() for line in f))
+            os.remove(os.path.join(self.path, filename.name))
+            return lines

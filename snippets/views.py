@@ -6,6 +6,7 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
+from snippets.modifications import FileProcesses
 from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
@@ -52,7 +53,16 @@ class FileUploadView(views.APIView):
     serializer_class = SnippetSerializer
 
     def post(self, request, filename, format=None):
-        request.data['code'] = "print('TEST')"
+        file_obj = FileProcesses(request)
+        list_of_data = file_obj.file_processing()
+        data = '\n'.join(list_of_data)
+        if filename.startswith("keywords"):
+            request.data['keywords'] = data
+            request.data['code'] = data
+        else:
+            keywords = request.data['keywords']
+            print(keywords)
+            request.data['code'] = data
         serializer = SnippetSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(owner=request.user)

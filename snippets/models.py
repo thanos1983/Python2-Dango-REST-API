@@ -36,6 +36,9 @@ class Snippet(models.Model):
                              default='Default Title',
                              help_text='Choose Text Title (Optional)')
 
+    # keywords list to be updated
+    # keywords = models.CharField(max_length=200, blank=True)
+
     # text to be updated
     code = models.TextField(help_text='Insert Here the Text to Format')
 
