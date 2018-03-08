@@ -4,9 +4,8 @@ from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer, FileUploaderSerializer
+from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
-from snippets.modifications import FileProcesses
 from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
@@ -48,22 +47,25 @@ from rest_framework import status
 class FileUploadView(views.APIView):
     parser_classes = (FileUploadParser,)
     queryset = Snippet.objects.all()
-    serializer_class = FileUploaderSerializer
+    serializer_class = SnippetSerializer
 
     def post(self, request, filename, format=None):
         request.data['code'] = "print('TEST')"
-        serializer = FileUploaderSerializer(data=request.data)
+        serializer = SnippetSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        #file_obj = FileProcesses(request)
-        # return file_obj.file_processing()
-
     def put(self, request, filename, format=None):
-        file_obj = FileProcesses(request)
-        return file_obj.file_processing()
+        request.data['code'] = "print('TEST')"
+        serializer = SnippetSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # file_obj = FileProcesses(request)
+        # return file_obj.file_processing()
 
 
 class SnippetList(mixins.ListModelMixin,
