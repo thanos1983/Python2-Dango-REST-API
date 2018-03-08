@@ -19,19 +19,35 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
 class Snippet(models.Model):
-    owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User',
+                              related_name='snippets',
+                              on_delete=models.CASCADE)
     highlighted = models.TextField()
 
     created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='Default Title')
-    code = models.TextField()
-    linenos = models.BooleanField(default=False)
-    language = models.CharField(choices=LANGUAGE_CHOICES, default='Python', max_length=100)
-    character = models.CharField(choices=CHARACTER_CHOICES, default=u"\u00AE", max_length=100)
-    style = models.CharField(choices=STYLE_CHOICES, default='emacs', max_length=100)
+    title = models.CharField(max_length=100,
+                             blank=True,
+                             default='Default Title',
+                             help_text='Choose Text Title (Optional)')
+    code = models.TextField(help_text='Insert Here the Text to Format')
+    linenos = models.BooleanField(default=False,
+                                  help_text='Add Line Numbers in Viewing Highlighted url Link (Optional)')
+    language = models.CharField(choices=LANGUAGE_CHOICES,
+                                default='Python',
+                                max_length=100,
+                                help_text='Choose Programming Language in Viewing the Highlighted url Link (Optional)')
+    character = models.CharField(choices=CHARACTER_CHOICES,
+                                 default=u"\u00AE",
+                                 max_length=100,
+                                 help_text='Choose Character to Replace')
+    style = models.CharField(choices=STYLE_CHOICES,
+                             default='emacs',
+                             max_length=100,
+                             help_text='Choose Flavor of Text Editor in Viewing the Highlighted url Link (Optional)')
     file = models.FileField(blank=False,
                             null=False,
-                            upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'))
+                            upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'),
+                            help_text='Choose File to Upload')
 
     def save(self, *args, **kwargs):
         """
