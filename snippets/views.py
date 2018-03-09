@@ -61,13 +61,20 @@ class FileUploadView(views.APIView):
             serializer.save(owner=self.request.user,)
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
-            # retrieve the data from the file
-            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
-            data = '\n'.join(list_of_data)
-            # parts = request.filename.name.split('.')
-            # print(parts)
-            # store the retrieved data
-            serializer.save(code=data,)
+            # get filename
+            file_name = request.data.get('file')
+            if file_name.name == 'keywords.txt':
+                # retrieve the data from the file
+                list_of_data = file_obj.file_processing(settings.PROJECT_ROOT)
+                keywords = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(code=keywords,
+                                keywords=keywords)
+            else:
+                list_of_data = file_obj.file_processing(settings.PROJECT_ROOT)
+                data = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(code=data,)
             # empty the dir of the data files
             file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

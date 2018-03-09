@@ -10,7 +10,6 @@ class FileProcesses:
         :rtype: object
         """
         self.request = request
-        self.keywords = None
         self.path = None
 
     def file_processing(self, path):
@@ -29,11 +28,6 @@ class FileProcesses:
             file_path = os.path.join(self.path, the_file)
             if os.path.isfile(file_path):
                 os.unlink(file_path)
-
-    def file_keywords(self, filename):
-        # remove processed file
-        os.remove(os.path.join(self.path, filename))
-        return self.keywords
 
     def search_and_append(self):
         return self.path

@@ -9,10 +9,9 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Snippet
-        fields = ('url', 'id', 'highlight', 'owner',
-                  'title', 'code', 'linenos', 'language', 'character', 'style', 'file')
+        fields = ('url', 'id', 'highlight', 'owner', 'file')
 
-        # keep this field hidden from the output (content of the file is stored in code)
+        # keep this field hidden from the output (content of the file is stored in keywords)
         extra_kwargs = {
             'file': {'write_only': True}
         }
