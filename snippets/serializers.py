@@ -3,6 +3,21 @@ from snippets.models import Snippet
 from django.contrib.auth.models import User
 
 
+class FileSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+
+    class Meta:
+        model = Snippet
+        fields = ('url', 'id', 'highlight', 'owner',
+                  'title', 'code', 'linenos', 'language', 'character', 'style', 'file')
+
+        # keep this field hidden from the output (content of the file is stored in code)
+        extra_kwargs = {
+            'file': {'write_only': True}
+        }
+
+
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
@@ -11,11 +26,6 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
         model = Snippet
         fields = ('url', 'id', 'highlight', 'owner',
                   'title', 'code', 'linenos', 'language', 'character', 'style',)
-
-        # keep this field hidden from the output (content of the file is stored in code)
-        extra_kwargs = {
-            'file': {'write_only': True}
-        }
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

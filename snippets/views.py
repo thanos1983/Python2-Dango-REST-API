@@ -4,7 +4,7 @@ from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from snippets.serializers import SnippetSerializer, FileSerializer
 from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import mixins, views
@@ -50,20 +50,26 @@ class UserDetail(generics.RetrieveAPIView):
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
+    # retrieve all fields from Snippet model
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = SnippetSerializer(data=request.data,
-                                       context={'request': request})
+        serializer = FileSerializer(data=request.data,
+                                    context={'request': request})
         if serializer.is_valid():
+            # save the data so the file can be created
             serializer.save(owner=self.request.user,)
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
             # retrieve the data from the file
             list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
             data = '\n'.join(list_of_data)
+            # parts = request.filename.name.split('.')
+            # print(parts)
+            # store the retrieved data
             serializer.save(code=data,)
+            # empty the dir of the data files
+            file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -24,6 +24,12 @@ class FileProcesses:
             lines = filter(None, (line.rstrip() for line in f))
         return lines
 
+    def delete_data_files(self):
+        for the_file in os.listdir(self.path):
+            file_path = os.path.join(self.path, the_file)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
     def file_keywords(self, filename):
         # remove processed file
         os.remove(os.path.join(self.path, filename))
