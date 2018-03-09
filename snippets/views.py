@@ -56,11 +56,34 @@ class FileUploadView(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = FileSerializer(data=request.data,
                                     context={'request': request})
+
         if serializer.is_valid():
             # save the data so the file can be created
-            serializer.save(owner=self.request.user,)
+            serializer.save(owner=self.request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
+            # retrieve the data from the file
+            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+            data = '\n'.join(list_of_data)
+            file_name = request.data.get('file')
+            if file_name.name == 'keywords.txt':
+                keywords = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(code=keywords,
+                                keywords=keywords)
+            else:
+                data = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(code=data,)
+            # store the retrieved data
+            serializer.save(code=data, )
+            # empty the dir of the data files
+            file_obj.delete_data_files()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        '''
             # get filename
             file_name = request.data.get('file')
             if file_name.name == 'keywords.txt':
@@ -76,10 +99,7 @@ class FileUploadView(views.APIView):
                 # store the retrieved data
                 serializer.save(code=data,)
             # empty the dir of the data files
-            file_obj.delete_data_files()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            file_obj.delete_data_files()'''
 
 
 # class to be called when user is sending GET / POST requests through url <ip>:<port>/snippets/

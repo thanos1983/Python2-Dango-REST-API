@@ -128,9 +128,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-LOGGING_ROOT = os.path.join(PROJECT_ROOT, 'logging')
-TMP_ROOT = os.path.join(PROJECT_ROOT, 'tmp')
+LOGGING_ROOT = os.path.join(STATIC_ROOT, 'logging')
+KEY_WORDS_ROOT = os.path.join(STATIC_ROOT, 'keywords')
+FILES_ROOT = os.path.join(STATIC_ROOT, 'files')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
