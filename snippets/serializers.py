@@ -12,6 +12,11 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'highlight', 'owner',
                   'title', 'code', 'linenos', 'language', 'character', 'style', 'file',)
 
+        # keep this field hidden from the output (content of the file is stored in code)
+        extra_kwargs = {
+            'file': {'write_only': True}
+        }
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail', read_only=True)

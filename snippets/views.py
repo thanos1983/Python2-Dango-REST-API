@@ -6,13 +6,14 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
-from snippets.modifications import FileProcesses
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import mixins, views
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import renderers
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
+from snippets.modifications import FileProcesses
+from thanosTest import settings
 
 
 # GET to be called when user is or not logged in url <ip>:<port>
@@ -24,7 +25,7 @@ def api_root(request, format=None):
     })
 
 
-# class to be called when user is sending POST / PUT requests through url <ip>:<port>/snippets/(?P<pk>[0-9]+)/highlight/
+# class to be called when user is choosing url <ip>:<port>/snippets/(?P<pk>[0-9]+)/highlight/
 class SnippetHighlight(generics.GenericAPIView):
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
@@ -34,50 +35,38 @@ class SnippetHighlight(generics.GenericAPIView):
         return Response(snippet.highlighted)
 
 
-# class to be called when user is sending POST / PUT requests through url <ip>:<port>/users/
+# class to be called when user is choosing url <ip>:<port>/users/
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-# class to be called when user is sending POST / PUT requests through url <ip>:<port>/users/(?P<pk>[0-9]+)/$
+# class to be called when user is choosing url <ip>:<port>/users/(?P<pk>[0-9]+)/$
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-# class to be called when user is sending POST / PUT requests through url <ip>:<port>/upload/
+# class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
-    parser_classes = (FileUploadParser,)
+    parser_classes = (MultiPartParser, FormParser)
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
 
-    def post(self, request, filename, format=None):
-        file_obj = FileProcesses(request)
-        list_of_data = file_obj.file_processing()
-        data = '\n'.join(list_of_data)
-        if filename.startswith("keywords"):
-            request.data['keywords'] = data
-            request.data['code'] = data
+    def post(self, request, *args, **kwargs):
+        serializer = SnippetSerializer(data=request.data,
+                                       context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=self.request.user,)
+            # instantiate the class the pass the request to be used by all methods
+            file_obj = FileProcesses(request)
+            # retrieve the data from the file
+            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+            data = '\n'.join(list_of_data)
+            serializer.save(code=data,)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            keywords = request.data['keywords']
-            print(keywords)
-            request.data['code'] = data
-        serializer = SnippetSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, filename, format=None):
-        request.data['code'] = "print('TEST')"
-        serializer = SnippetSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # file_obj = FileProcesses(request)
-        # return file_obj.file_processing()
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class to be called when user is sending GET / POST requests through url <ip>:<port>/snippets/

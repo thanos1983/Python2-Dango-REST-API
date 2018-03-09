@@ -44,8 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'snippets.apps.SnippetsConfig',
+    'rest_framework',
+    'thanosTest',
 ]
 
 MIDDLEWARE = [
@@ -125,8 +126,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 LOGGING_ROOT = os.path.join(STATIC_ROOT, 'logging')
 KEY_WORDS_ROOT = os.path.join(STATIC_ROOT, 'keywords')

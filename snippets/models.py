@@ -4,9 +4,6 @@ from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
-from thanosTest import settings
-
-import os
 
 # tuple of character(s)
 CHARACTER_CHOICES = (
@@ -37,10 +34,11 @@ class Snippet(models.Model):
                              help_text='Choose Text Title (Optional)')
 
     # keywords list to be updated
-    # keywords = models.CharField(max_length=200, blank=True)
+    keywords = models.CharField(max_length=200, blank=True)
 
-    # text to be updated
-    code = models.TextField(help_text='Insert Here the Text to Format')
+    # text to be updated if we choose to input data manually
+    code = models.TextField(blank=True,
+                            help_text='Insert Here the Text to Format')
 
     # line number on highlighted url
     linenos = models.BooleanField(default=False,
@@ -67,7 +65,6 @@ class Snippet(models.Model):
     # file to load that contains the lines
     file = models.FileField(blank=False,
                             null=False,
-                            upload_to=os.path.join(settings.RELATIVE_ROOT, 'static', 'files'),
                             help_text='Choose File to Upload')
 
     def save(self, *args, **kwargs):
