@@ -53,7 +53,7 @@ class FileUploadView(views.APIView):
     # retrieve all fields from Snippet model
     queryset = Snippet.objects.all()
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format=None):
         serializer = FileSerializer(data=request.data,
                                     context={'request': request})
 
@@ -114,7 +114,7 @@ class SnippetList(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format=None):
         serializer = SnippetSerializer(data=request.data,
                                        context={'request': request})
 
