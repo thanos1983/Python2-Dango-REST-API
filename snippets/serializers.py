@@ -9,7 +9,7 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Snippet
-        fields = ('url', 'id', 'highlight', 'owner', 'file')
+        fields = ('url', 'id', 'highlight', 'owner',)
 
         # keep this field hidden from the output (content of the file is stored in keywords)
         extra_kwargs = {
@@ -28,7 +28,8 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail', read_only=True)
+    snippets = serializers.HyperlinkedRelatedField(many=True,
+                                                   view_name='snippet-detail', read_only=True)
 
     class Meta:
         model = User

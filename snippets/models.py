@@ -38,7 +38,7 @@ class Snippet(models.Model):
     keywords = models.CharField(max_length=200, blank=True)
 
     # text to be updated if we choose to input data manually
-    code = models.TextField(blank=True,
+    code = models.TextField(blank=False,
                             help_text='Insert Here the Text to Format')
 
     # line number on highlighted url

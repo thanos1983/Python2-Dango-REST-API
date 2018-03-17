@@ -74,7 +74,7 @@ class FileUploadView(views.APIView):
             else:
                 data = '\n'.join(list_of_data)
                 # store the retrieved data
-                serializer.save(code=data,)
+                serializer.save(code=data, )
             # store the retrieved data
             serializer.save(code=data, )
             # empty the dir of the data files
@@ -114,12 +114,19 @@ class SnippetList(mixins.ListModelMixin,
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        request.data['code'] = "print('TEST')"
-        serializer = SnippetSerializer(data=request.data, context={'request': request})
+        serializer = FileSerializer(data=request.data,
+                                    context={'request': request})
+
         if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(owner=self.request.user, )
+            # request.data['code'] = "print('TEST')"
+            serializer = SnippetSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save(owner=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # class to be called when user is sending GET / PUT / DELETE requests through url <ip>:<port>/snippets/(?P<pk>[0-9]+)/
