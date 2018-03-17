@@ -17,6 +17,7 @@ pygments = "*"
 gunicorn = "*"
 "psycopg2" = "*"
 whitenoise = "*"
+psycopg2-binary = "*"
 django-toolbelt = "*"
 
 
