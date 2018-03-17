@@ -14,6 +14,7 @@ name = "pypi"
 djangorestframework = "*"
 pygments = "*"
 whitenoise = "*"
+psycopg2-binary = "*"
 django-toolbelt = "*"
 psycopg2-binary = "*"
 
