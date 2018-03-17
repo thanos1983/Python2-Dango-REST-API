@@ -11,11 +11,8 @@ name = "pypi"
 
 [packages]
 
-django = "*"
 djangorestframework = "*"
 pygments = "*"
-gunicorn = "*"
-"psycopg2" = "*"
 whitenoise = "*"
 django-toolbelt = "*"
 
