@@ -15,6 +15,7 @@ djangorestframework = "*"
 pygments = "*"
 whitenoise = "*"
 django-toolbelt = "*"
+psycopg2-binary = "*"
 
 
 [requires]
