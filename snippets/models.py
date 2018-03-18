@@ -70,7 +70,7 @@ class Snippet(models.Model):
     # keywords list to be updated
     keywords = models.CharField(max_length=200,
                                 blank=True,
-                                default='Test\Test2', )
+                                default="Test\nTest2", )
 
     # line number on highlighted url
     linenos = models.BooleanField(default=False,

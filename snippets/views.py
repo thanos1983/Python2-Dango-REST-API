@@ -14,6 +14,7 @@ from rest_framework import renderers
 from rest_framework.response import Response
 from snippets.modifications import FileProcesses
 from thanosTest import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # GET to be called when user is or not logged in url <ip>:<port>
@@ -52,15 +53,12 @@ class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        ser_file = FileSerializer(data=request.data,
-                                  context={'request': request})
+        serializer = SnippetSerializer(data=request.data,
+                                       context={'request': request})
 
-        ser_snippet = SnippetSerializer(data=request.data,
-                                        context={'request': request})
-
-        if ser_file.is_valid() and ser_snippet.is_valid():
+        if serializer.is_valid():
             # save the data so the file can be created
-            ser_file.save(owner=self.request.user, )
+            serializer.save(owner=self.request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
             # retrieve the data from the file
@@ -70,15 +68,25 @@ class FileUploadView(views.APIView):
             if file_name.name == 'keywords.txt':
                 keywords = '\n'.join(list_of_data)
                 # store the retrieved data
-                ser_file.save(keywords=keywords, )
+                serializer.save(owner=self.request.user,
+                                code=keywords,
+                                keywords=keywords, )
             else:
-                data = '\n'.join(list_of_data)
-                ser_snippet.save(owner=request.user,
-                                 code=data, )
+                information = '\n'.join(list_of_data)
+                # entry = self.getLatestKeywords(serializer.data['id'])
+                entry = 1
+                if entry:
+                    serializer.validated_data
+                    serializer.save(owner=self.request.user,
+                                    code=information,
+                                    keywords=serializer.data['keywords'])
+                else:
+                    serializer.save(owner=self.request.user,
+                                    code=information, )
             # empty the dir of the data files
             file_obj.delete_data_files()
-            return Response(ser_file.data, status=status.HTTP_201_CREATED)
-        return Response(ser_file.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class to be called when user is sending GET / POST requests through url <ip>:<port>/snippets/
