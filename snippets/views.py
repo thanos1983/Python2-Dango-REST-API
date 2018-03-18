@@ -14,7 +14,6 @@ from rest_framework import renderers
 from rest_framework.response import Response
 from snippets.modifications import FileProcesses
 from thanosTest import settings
-from django.core.exceptions import ObjectDoesNotExist
 
 
 # GET to be called when user is or not logged in url <ip>:<port>
@@ -72,17 +71,12 @@ class FileUploadView(views.APIView):
                                 code=keywords,
                                 keywords=keywords, )
             else:
+                # retrieve latest keywords inserted by user
+                keywords_obj = Snippet.objects.filter(owner=request.user).last()
                 information = '\n'.join(list_of_data)
-                # entry = self.getLatestKeywords(serializer.data['id'])
-                entry = 1
-                if entry:
-                    serializer.validated_data
-                    serializer.save(owner=self.request.user,
-                                    code=information,
-                                    keywords=serializer.data['keywords'])
-                else:
-                    serializer.save(owner=self.request.user,
-                                    code=information, )
+                serializer.save(owner=self.request.user,
+                                code=information,
+                                keywords=keywords_obj.keywords)
             # empty the dir of the data files
             file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
