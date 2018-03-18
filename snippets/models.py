@@ -16,6 +16,34 @@ LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
+class FileSnippet(models.Model):
+    # This is the user of the text
+    owner = models.ForeignKey('auth.User',
+                              related_name='files',
+                              on_delete=models.CASCADE)
+
+    # timestamp of the moment of the action
+    created = models.DateTimeField(auto_now_add=True)
+
+    # keywords list to be updated
+    keywords = models.CharField(max_length=200, blank=True)
+
+    # choice of characters to replace
+    character = models.CharField(default=u"\u00AE",
+                                 max_length=10, )
+
+    # file to load that contains the lines
+    file = models.FileField(blank=False,
+                            null=False, )
+
+    def save(self, *args, **kwargs):
+        super(FileSnippet, self).save(*args, **kwargs)
+
+    class Meta:
+        # in which order to store the objects
+        ordering = ('created',)
+
+
 class Snippet(models.Model):
     # This is the user of the text
     owner = models.ForeignKey('auth.User',
@@ -30,16 +58,19 @@ class Snippet(models.Model):
 
     # optional title of the text
     title = models.CharField(max_length=100,
-                             blank=True,
+                             blank=False,
                              default='Default Title',
                              help_text='Choose Text Title (Optional)')
 
-    # keywords list to be updated
-    keywords = models.CharField(max_length=200, blank=True)
-
     # text to be updated if we choose to input data manually
     code = models.TextField(blank=False,
+                            default='Sample of Code',
                             help_text='Insert Here the Text to Format')
+
+    # keywords list to be updated
+    keywords = models.CharField(max_length=200,
+                                blank=True,
+                                default='Test\Test2', )
 
     # line number on highlighted url
     linenos = models.BooleanField(default=False,
@@ -54,19 +85,18 @@ class Snippet(models.Model):
     # choice of characters to replace
     character = models.CharField(choices=CHARACTER_CHOICES,
                                  default=u"\u00AE",
-                                 max_length=100,
+                                 max_length=10,
                                  help_text='Choose Character to Replace')
 
     # another option of character representation on highlighted view
     style = models.CharField(choices=STYLE_CHOICES,
                              default='emacs',
-                             max_length=100,
+                             max_length=10,
                              help_text='Choose Flavor of Text Editor in Viewing the Highlighted url Link (Optional)')
 
     # file to load that contains the lines
     file = models.FileField(blank=False,
-                            null=False,
-                            help_text='Choose File to Upload')
+                            null=False, )
 
     def save(self, *args, **kwargs):
         """

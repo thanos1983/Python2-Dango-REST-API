@@ -50,57 +50,35 @@ class UserDetail(generics.RetrieveAPIView):
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
-    # retrieve all fields from Snippet model
-    queryset = Snippet.objects.all()
 
-    def post(self, request, format=None):
-        serializer = FileSerializer(data=request.data,
-                                    context={'request': request})
+    def post(self, request, *args, **kwargs):
+        ser_file = FileSerializer(data=request.data,
+                                  context={'request': request})
 
-        if serializer.is_valid():
+        ser_snippet = SnippetSerializer(data=request.data,
+                                        context={'request': request})
+
+        if ser_file.is_valid() and ser_snippet.is_valid():
             # save the data so the file can be created
-            serializer.save(owner=self.request.user, )
+            ser_file.save(owner=self.request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
             # retrieve the data from the file
             list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
-            data = '\n'.join(list_of_data)
+            # check filename in case of keywords store keywords
             file_name = request.data.get('file')
             if file_name.name == 'keywords.txt':
                 keywords = '\n'.join(list_of_data)
                 # store the retrieved data
-                serializer.save(code=keywords,
-                                keywords=keywords)
+                ser_file.save(keywords=keywords, )
             else:
                 data = '\n'.join(list_of_data)
-                # store the retrieved data
-                serializer.save(code=data, )
-            # store the retrieved data
-            serializer.save(code=data, )
+                ser_snippet.save(owner=request.user,
+                                 code=data, )
             # empty the dir of the data files
             file_obj.delete_data_files()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-        '''
-            # get filename
-            file_name = request.data.get('file')
-            if file_name.name == 'keywords.txt':
-                # retrieve the data from the file
-                list_of_data = file_obj.file_processing(settings.PROJECT_ROOT)
-                keywords = '\n'.join(list_of_data)
-                # store the retrieved data
-                serializer.save(code=keywords,
-                                keywords=keywords)
-            else:
-                list_of_data = file_obj.file_processing(settings.PROJECT_ROOT)
-                data = '\n'.join(list_of_data)
-                # store the retrieved data
-                serializer.save(code=data,)
-            # empty the dir of the data files
-            file_obj.delete_data_files()'''
+            return Response(ser_file.data, status=status.HTTP_201_CREATED)
+        return Response(ser_file.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class to be called when user is sending GET / POST requests through url <ip>:<port>/snippets/

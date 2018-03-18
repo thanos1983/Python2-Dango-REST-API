@@ -11,11 +11,11 @@ name = "pypi"
 
 [packages]
 
-djangorestframework = "*"
 pygments = "*"
 whitenoise = "*"
 psycopg2-binary = "*"
 django-toolbelt = "*"
+djangorestframework = "*"
 
 
 [requires]
