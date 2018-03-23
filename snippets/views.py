@@ -94,15 +94,32 @@ class SnippetList(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = SnippetSerializer(data=request.data,
                                        context={'request': request})
 
         if serializer.is_valid():
-            serializer.save(owner=request.user, )
+            # retrieve latest keywords inserted by user
+            keywords_obj = Snippet.objects.filter(owner=request.user).last()
+            # save the data so the file can be created
+            serializer.save(owner=self.request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
-            # request.data['code'] = "print('TEST')"
+            # retrieve the data from the file
+            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+            # check filename in case of keywords store keywords
+            file_name = request.data.get('file')
+            if file_name.name == 'keywords.txt':
+                keywords = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(owner=self.request.user,
+                                code=keywords,
+                                keywords=keywords, )
+            else:
+                information = '\n'.join(list_of_data)
+                serializer.save(owner=self.request.user,
+                                code=information,
+                                keywords=keywords_obj.keywords)
             # empty the dir of the data files
             file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
