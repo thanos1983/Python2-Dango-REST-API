@@ -4,7 +4,7 @@ from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer, FileSerializer
+from snippets.serializers import SnippetSerializer
 from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import mixins, views
@@ -56,6 +56,8 @@ class FileUploadView(views.APIView):
                                        context={'request': request})
 
         if serializer.is_valid():
+            # retrieve latest keywords inserted by user
+            keywords_obj = Snippet.objects.filter(owner=request.user).last()
             # save the data so the file can be created
             serializer.save(owner=self.request.user, )
             # instantiate the class the pass the request to be used by all methods
@@ -71,8 +73,6 @@ class FileUploadView(views.APIView):
                                 code=keywords,
                                 keywords=keywords, )
             else:
-                # retrieve latest keywords inserted by user
-                keywords_obj = Snippet.objects.filter(owner=request.user).last()
                 information = '\n'.join(list_of_data)
                 serializer.save(owner=self.request.user,
                                 code=information,

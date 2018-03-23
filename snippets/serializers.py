@@ -1,19 +1,6 @@
 from rest_framework import serializers
-from snippets.models import Snippet, FileSnippet
+from snippets.models import Snippet
 from django.contrib.auth.models import User
-
-
-class FileSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
-
-    class Meta:
-        model = FileSnippet
-        fields = ('owner', 'file',)
-
-        # keep this field hidden from the output (content of the file is stored in keywords)
-        extra_kwargs = {
-            'file': {'write_only': True}
-        }
 
 
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):

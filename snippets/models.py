@@ -16,34 +16,6 @@ LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
-class FileSnippet(models.Model):
-    # This is the user of the text
-    owner = models.ForeignKey('auth.User',
-                              related_name='files',
-                              on_delete=models.CASCADE)
-
-    # timestamp of the moment of the action
-    created = models.DateTimeField(auto_now_add=True)
-
-    # keywords list to be updated
-    keywords = models.CharField(max_length=200, blank=True)
-
-    # choice of characters to replace
-    character = models.CharField(default=u"\u00AE",
-                                 max_length=10, )
-
-    # file to load that contains the lines
-    file = models.FileField(blank=False,
-                            null=False, )
-
-    def save(self, *args, **kwargs):
-        super(FileSnippet, self).save(*args, **kwargs)
-
-    class Meta:
-        # in which order to store the objects
-        ordering = ('created',)
-
-
 class Snippet(models.Model):
     # This is the user of the text
     owner = models.ForeignKey('auth.User',
