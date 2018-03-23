@@ -36,13 +36,11 @@ class Snippet(models.Model):
 
     # text to be updated if we choose to input data manually
     code = models.TextField(blank=False,
-                            default='Sample of Code',
                             help_text='Insert Here the Text to Format')
 
     # keywords list to be updated
-    keywords = models.CharField(max_length=200,
-                                blank=True,
-                                default="Test\nTest2", )
+    keywords = models.TextField(max_length=200,
+                                blank=True)
 
     # line number on highlighted url
     linenos = models.BooleanField(default=False,

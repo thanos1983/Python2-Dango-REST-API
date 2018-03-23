@@ -14,6 +14,7 @@ from rest_framework import renderers
 from rest_framework.response import Response
 from snippets.modifications import FileProcesses
 from thanosTest import settings
+from rest_framework.exceptions import NotAcceptable
 
 
 # GET to be called when user is or not logged in url <ip>:<port>
@@ -56,8 +57,11 @@ class FileUploadView(views.APIView):
                                        context={'request': request})
 
         if serializer.is_valid():
-            # retrieve latest keywords inserted by user
-            keywords_obj = Snippet.objects.filter(owner=request.user).last()
+            # Retrieve latest keywords inserted by user
+            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
+            # If there are no keywords in data base raise 406 to the user and inform him
+            if not bool(db_dictionary):
+                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # save the data so the file can be created
             serializer.save(owner=request.user, )
             # instantiate the class the pass the request to be used by all methods
@@ -76,7 +80,7 @@ class FileUploadView(views.APIView):
                 information = '\n'.join(list_of_data)
                 serializer.save(owner=self.request.user,
                                 code=information,
-                                keywords=keywords_obj.keywords)
+                                keywords=db_dictionary['keywords'])
             # empty the dir of the data files
             file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -98,9 +102,15 @@ class SnippetList(mixins.ListModelMixin,
         serializer = SnippetSerializerGui(data=request.data,
                                           context={'request': request})
         if serializer.is_valid():
-            serializer.save(owner=request.user,
-                            code=u"print('TEST')")
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # retrieve latest keywords inserted by user
+            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
+            # if keywords found in database save and proceed
+            if bool(db_dictionary):
+                serializer.save(owner=request.user,
+                                code=u"print('TEST')",
+                                keywords=db_dictionary['keywords'])
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
