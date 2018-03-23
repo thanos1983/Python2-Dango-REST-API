@@ -59,7 +59,7 @@ class FileUploadView(views.APIView):
             # retrieve latest keywords inserted by user
             keywords_obj = Snippet.objects.filter(owner=request.user).last()
             # save the data so the file can be created
-            serializer.save(owner=self.request.user, )
+            serializer.save(owner=request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
             # retrieve the data from the file
@@ -98,8 +98,8 @@ class SnippetList(mixins.ListModelMixin,
         serializer = SnippetSerializerGui(data=request.data,
                                           context={'request': request})
         if serializer.is_valid():
-            serializer.save(owner=request.user)
-            # request.data['code'] = "print('TEST')"
+            serializer.save(owner=request.user,
+                            code=u"print('TEST')")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
