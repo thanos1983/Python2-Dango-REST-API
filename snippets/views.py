@@ -100,7 +100,11 @@ class SnippetList(mixins.ListModelMixin,
 
         if serializer.is_valid():
             serializer.save(owner=request.user, )
+            # instantiate the class the pass the request to be used by all methods
+            file_obj = FileProcesses(request)
             # request.data['code'] = "print('TEST')"
+            # empty the dir of the data files
+            file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
