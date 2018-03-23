@@ -4,7 +4,7 @@ from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from snippets.serializers import SnippetSerializer, SnippetSerializerGui
 from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import mixins, views
@@ -89,39 +89,17 @@ class SnippetList(mixins.ListModelMixin,
                   generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
+    serializer_class = SnippetSerializerGui
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        serializer = SnippetSerializer(data=request.data,
-                                       context={'request': request})
-
+        serializer = SnippetSerializerGui(data=request.data,
+                                          context={'request': request})
         if serializer.is_valid():
-            # retrieve latest keywords inserted by user
-            keywords_obj = Snippet.objects.filter(owner=request.user).last()
-            # save the data so the file can be created
-            serializer.save(owner=self.request.user, )
-            # instantiate the class the pass the request to be used by all methods
-            file_obj = FileProcesses(request)
-            # retrieve the data from the file
-            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
-            # check filename in case of keywords store keywords
-            file_name = request.data.get('file')
-            if file_name.name == 'keywords.txt':
-                keywords = '\n'.join(list_of_data)
-                # store the retrieved data
-                serializer.save(owner=self.request.user,
-                                code=keywords,
-                                keywords=keywords, )
-            else:
-                information = '\n'.join(list_of_data)
-                serializer.save(owner=self.request.user,
-                                code=information,
-                                keywords=keywords_obj.keywords)
-            # empty the dir of the data files
-            file_obj.delete_data_files()
+            serializer.save(owner=request.user)
+            # request.data['code'] = "print('TEST')"
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -134,7 +112,7 @@ class SnippetDetail(mixins.RetrieveModelMixin,
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
+    serializer_class = SnippetSerializerGui
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

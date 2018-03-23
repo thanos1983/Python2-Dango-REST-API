@@ -67,7 +67,7 @@ class Snippet(models.Model):
                              help_text='Choose Flavor of Text Editor in Viewing the Highlighted url Link (Optional)')
 
     # file to load that contains the lines
-    file = models.FileField(blank=False,
+    file = models.FileField(blank=True,
                             null=False, )
 
     def save(self, *args, **kwargs):
