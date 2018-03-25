@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from django.contrib.auth.models import User
+from django.http import Http404
 from rest_framework import generics, status
 from rest_framework import mixins, views
 from rest_framework import permissions
@@ -52,9 +53,23 @@ class UserDetail(generics.RetrieveAPIView):
 
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadViewKeywords(views.APIView):
+    """
+    List all keywords, or create a new input.
+    """
     parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, *args, **kwargs):
+    def get_object(self, pk):
+        try:
+            return Keyword.objects.get(pk=pk)
+        except Keyword.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        keywords = Keyword.objects.all()
+        serializer = KeywordSerializer(keywords, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
         serializer = KeywordSerializer(data=request.data,
                                        context={'request': request})
 
@@ -82,12 +97,17 @@ class FileUploadViewKeywords(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format=None):
         serializer = SnippetSerializer(data=request.data,
                                        context={'request': request})
 
@@ -96,22 +116,19 @@ class FileUploadView(views.APIView):
             db_dictionary = Keyword.objects.filter(owner=request.user).values('keywords').last()
             # If there are no keywords in data base raise 406 to the user and inform him
             if not bool(db_dictionary):
-                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
-            # save the data so the file can be created
-            serializer.save(owner=request.user, )
-            # instantiate the class the pass the request to be used by all methods
-            file_obj = FileProcesses(request)
-            # retrieve the data from the file
-            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+                raise NotAcceptable("There are no keywords in database. Please upload a 'keywords.txt' file.")
             # check filename in case of keywords store keywords
             file_name = request.data.get('file')
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
-                # empty the dir of the data files
-                file_obj.delete_data_files()
-                raise NotAcceptable("For file upload with file name e.g. 'keywords.txt' use url '\/keywords\/'")
-
+                raise NotAcceptable("For file upload with file name e.g. 'keywords.txt' use url '/keywords/'")
             else:
+                # save the data so the file can be created
+                serializer.save(owner=request.user, )
+                # instantiate the class the pass the request to be used by all methods
+                file_obj = FileProcesses(request)
+                # retrieve the data from the file
+                list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
                 information = '\n'.join(list_of_data)
                 serializer.save(owner=self.request.user,
                                 code=information,
