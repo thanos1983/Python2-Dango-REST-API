@@ -3,8 +3,8 @@ from rest_framework import generics, status
 from snippets.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
-from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer, SnippetSerializerGui
+from snippets.models import Snippet, Keyword
+from snippets.serializers import SnippetSerializer, SnippetSerializerGui, KeywordSerializer
 from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import mixins, views
@@ -53,7 +53,7 @@ class FileUploadViewKeywords(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        serializer = SnippetSerializer(data=request.data,
+        serializer = KeywordSerializer(data=request.data,
                                        context={'request': request})
 
         if serializer.is_valid():
@@ -61,12 +61,6 @@ class FileUploadViewKeywords(views.APIView):
             serializer.save(owner=request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
-            # Retrieve latest keywords inserted by user
-            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
-            # If there are no keywords in data base raise 406 to the user and inform him
-            if not bool(db_dictionary):
-                file_obj.delete_data_files()
-                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # retrieve the data from the file
             list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
             # check filename in case of keywords store keywords
@@ -76,15 +70,13 @@ class FileUploadViewKeywords(views.APIView):
                 keywords = '\n'.join(list_of_data)
                 # store the retrieved data
                 serializer.save(owner=self.request.user,
-                                code=keywords,
                                 keywords=keywords, )
+                # empty the dir of the data files
+                file_obj.delete_data_files()
             else:
-                information = '\n'.join(list_of_data)
-                serializer.save(owner=self.request.user,
-                                code=information,
-                                keywords=db_dictionary['keywords'])
-            # empty the dir of the data files
-            file_obj.delete_data_files()
+                # empty the dir of the data files
+                file_obj.delete_data_files()
+                raise NotAcceptable("Please upload the correct file name e.g. 'keywords.txt'")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -98,27 +90,25 @@ class FileUploadView(views.APIView):
                                        context={'request': request})
 
         if serializer.is_valid():
+            # Retrieve latest keywords inserted by user
+            db_dictionary = Keyword.objects.filter(owner=request.user).values('keywords').last()
+            # If there are no keywords in data base raise 406 to the user and inform him
+            if not bool(db_dictionary):
+                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # save the data so the file can be created
             serializer.save(owner=request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
-            # Retrieve latest keywords inserted by user
-            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
-            # If there are no keywords in data base raise 406 to the user and inform him
-            if not bool(db_dictionary):
-                file_obj.delete_data_files()
-                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # retrieve the data from the file
             list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
             # check filename in case of keywords store keywords
             file_name = request.data.get('file')
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
-                keywords = '\n'.join(list_of_data)
-                # store the retrieved data
-                serializer.save(owner=self.request.user,
-                                code=keywords,
-                                keywords=keywords, )
+                # empty the dir of the data files
+                file_obj.delete_data_files()
+                raise NotAcceptable("For file upload with file name e.g. 'keywords.txt' use url '\/keywords\/'")
+
             else:
                 information = '\n'.join(list_of_data)
                 serializer.save(owner=self.request.user,

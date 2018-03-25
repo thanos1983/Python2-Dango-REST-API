@@ -1,9 +1,9 @@
 from django.db import models
-from pygments.lexers import get_all_lexers
-from pygments.styles import get_all_styles
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers import get_all_lexers
+from pygments.lexers import get_lexer_by_name
+from pygments.styles import get_all_styles
 
 # tuple of character(s)
 CHARACTER_CHOICES = (
@@ -35,13 +35,8 @@ class Snippet(models.Model):
                              help_text='Choose Text Title (Optional)')
 
     # text to be updated if we choose to input data manually
-    code = models.TextField(blank=True,
-                            default='Default Sample of code',
+    code = models.TextField(blank=False,
                             help_text='Insert Here the Text to Format')
-
-    # keywords list to be updated
-    keywords = models.TextField(max_length=200,
-                                blank=True)
 
     # line number on highlighted url
     linenos = models.BooleanField(default=False,
@@ -81,6 +76,31 @@ class Snippet(models.Model):
                                   full=True, **options)
         self.highlighted = highlight(self.code, lexer, formatter)
         super(Snippet, self).save(*args, **kwargs)
+
+    class Meta:
+        # in which order to store the objects
+        ordering = ('created',)
+
+
+class Keyword(models.Model):
+    # This is the user of the text
+    owner = models.ForeignKey('auth.User',
+                              related_name='keywords',
+                              on_delete=models.CASCADE)
+
+    # timestamp of the moment of the action
+    created = models.DateTimeField(auto_now_add=True)
+
+    # keywords list to be updated
+    keywords = models.TextField(max_length=200,
+                                blank=True)
+
+    # file to load that contains the lines
+    file = models.FileField(blank=False,
+                            null=False, )
+
+    def save(self, *args, **kwargs):
+        super(Keyword, self).save(*args, **kwargs)
 
     class Meta:
         # in which order to store the objects
