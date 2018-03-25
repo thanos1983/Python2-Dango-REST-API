@@ -35,7 +35,8 @@ class Snippet(models.Model):
                              help_text='Choose Text Title (Optional)')
 
     # text to be updated if we choose to input data manually
-    code = models.TextField(blank=False,
+    code = models.TextField(blank=True,
+                            default='Default Sample of code',
                             help_text='Insert Here the Text to Format')
 
     # keywords list to be updated

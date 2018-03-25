@@ -49,6 +49,47 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
+class FileUploadViewKeywords(views.APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        serializer = SnippetSerializer(data=request.data,
+                                       context={'request': request})
+
+        if serializer.is_valid():
+            # save the data so the file can be created
+            serializer.save(owner=request.user, )
+            # instantiate the class the pass the request to be used by all methods
+            file_obj = FileProcesses(request)
+            # Retrieve latest keywords inserted by user
+            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
+            # If there are no keywords in data base raise 406 to the user and inform him
+            if not bool(db_dictionary):
+                file_obj.delete_data_files()
+                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
+            # retrieve the data from the file
+            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+            # check filename in case of keywords store keywords
+            file_name = request.data.get('file')
+            file_name.name = file_name.name.lower()
+            if file_name.name == 'keywords.txt':
+                keywords = '\n'.join(list_of_data)
+                # store the retrieved data
+                serializer.save(owner=self.request.user,
+                                code=keywords,
+                                keywords=keywords, )
+            else:
+                information = '\n'.join(list_of_data)
+                serializer.save(owner=self.request.user,
+                                code=information,
+                                keywords=db_dictionary['keywords'])
+            # empty the dir of the data files
+            file_obj.delete_data_files()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
@@ -57,19 +98,21 @@ class FileUploadView(views.APIView):
                                        context={'request': request})
 
         if serializer.is_valid():
-            # Retrieve latest keywords inserted by user
-            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
-            # If there are no keywords in data base raise 406 to the user and inform him
-            if not bool(db_dictionary):
-                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # save the data so the file can be created
             serializer.save(owner=request.user, )
             # instantiate the class the pass the request to be used by all methods
             file_obj = FileProcesses(request)
+            # Retrieve latest keywords inserted by user
+            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
+            # If there are no keywords in data base raise 406 to the user and inform him
+            if not bool(db_dictionary):
+                file_obj.delete_data_files()
+                raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
             # retrieve the data from the file
             list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
             # check filename in case of keywords store keywords
             file_name = request.data.get('file')
+            file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
                 keywords = '\n'.join(list_of_data)
                 # store the retrieved data

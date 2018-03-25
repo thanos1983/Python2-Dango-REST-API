@@ -27,7 +27,8 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 
         # keep this field hidden from the output (content of the file is stored in keywords)
         extra_kwargs = {
-            'file': {'write_only': True}
+            'file': {'write_only': True},
+            'keywords': {'write_only': True}
         }
 
 
