@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 from django.contrib.auth.models import User
-from django.http import Http404
 from rest_framework import generics, status
 from rest_framework import mixins, views
 from rest_framework import permissions
