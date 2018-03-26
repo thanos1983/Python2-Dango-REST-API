@@ -72,7 +72,7 @@ class FileUploadViewKeywords(views.APIView):
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
                 # save the data so the file can be created
-                serializer.save(owner=request.user, )
+                serializer.save(owner=self.request.user, )
                 # instantiate the class the pass the request to be used by all methods
                 file_obj = FileProcesses(request)
                 # retrieve the data from the file
@@ -93,9 +93,10 @@ class FileUploadViewKeywords(views.APIView):
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
+    queryset = Snippet.objects.all()
 
     def post(self, request, format=None):
-        serializer = SnippetSerializer(data=request.data,
+        serializer = SnippetSerializer(data=self.request.data,
                                        context={'request': request})
 
         if serializer.is_valid():
@@ -108,18 +109,23 @@ class FileUploadView(views.APIView):
             file_name = request.data.get('file')
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
-                raise NotAcceptable("For file upload with file name e.g. 'keywords.txt' use url '/keywords/'")
+                raise NotAcceptable("For file upload with file name 'keywords.txt' use url '<host>:<ip>/keywords/'")
             else:
-                # save the data so the file can be created
-                serializer.save(owner=request.user, )
+                # save the data so the file can be created under the user
+                serializer.save(owner=self.request.user, )
+                # retrieve character from request or DB
+                if 'character' in request.data:
+                    character = request.data.get('character ')
+                else:
+                    character = Snippet.objects.filter(owner=self.request.user).values('character').last()
+                print(self.queryset)
                 # instantiate the class the pass the request to be used by all methods
                 file_obj = FileProcesses(request)
                 # retrieve the data from the file
                 list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
                 information = '\n'.join(list_of_data)
                 serializer.save(owner=self.request.user,
-                                code=information,
-                                keywords=db_dictionary['keywords'])
+                                code=information, )
             # empty the dir of the data files
             file_obj.delete_data_files()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
