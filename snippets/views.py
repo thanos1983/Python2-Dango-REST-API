@@ -67,16 +67,17 @@ class FileUploadViewKeywords(views.APIView):
                                        context={'request': request})
 
         if serializer.is_valid():
-            # save the data so the file can be created
-            serializer.save(owner=request.user, )
-            # instantiate the class the pass the request to be used by all methods
-            file_obj = FileProcesses(request)
-            # retrieve the data from the file
-            list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
             # check filename in case of keywords store keywords
             file_name = request.data.get('file')
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
+                # save the data so the file can be created
+                serializer.save(owner=request.user, )
+                # instantiate the class the pass the request to be used by all methods
+                file_obj = FileProcesses(request)
+                # retrieve the data from the file
+                list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
+                # create a string from list append \n new line character
                 keywords = '\n'.join(list_of_data)
                 # store the retrieved data
                 serializer.save(owner=self.request.user,
@@ -84,8 +85,6 @@ class FileUploadViewKeywords(views.APIView):
                 # empty the dir of the data files
                 file_obj.delete_data_files()
             else:
-                # empty the dir of the data files
-                file_obj.delete_data_files()
                 raise NotAcceptable("Please upload the correct file name e.g. 'keywords.txt'")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
