@@ -58,12 +58,6 @@ class FileUploadViewKeywords(views.APIView):
     """
     parser_classes = (MultiPartParser, FormParser)
 
-    def get_object(self, pk):
-        try:
-            return Keyword.objects.get(pk=pk)
-        except Keyword.DoesNotExist:
-            raise Http404
-
     def get(self, request, format=None):
         keywords = Keyword.objects.all()
         serializer = KeywordSerializer(keywords, many=True)
@@ -96,11 +90,6 @@ class FileUploadViewKeywords(views.APIView):
                 raise NotAcceptable("Please upload the correct file name e.g. 'keywords.txt'")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
@@ -164,6 +153,22 @@ class SnippetList(mixins.ListModelMixin,
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class to be called when user is sending GET / DELETE requests through url <ip>:<port>/keywords/(?P<pk>[0-9]+)/
+class KeywordDetail(mixins.RetrieveModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly)
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 # class to be called when user is sending GET / PUT / DELETE requests through url <ip>:<port>/snippets/(?P<pk>[0-9]+)/
