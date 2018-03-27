@@ -1,4 +1,5 @@
 import os
+import string
 
 
 class FileProcesses:
@@ -20,8 +21,8 @@ class FileProcesses:
 
     def extract_data(self, filename):
         with open(os.path.join(self.path, filename)) as f:
-            lines = filter(None, (line.rstrip() for line in f))
-        return lines
+            data = filter(None, (line.rstrip() for line in f))
+        return data
 
     def delete_data_files(self):
         for the_file in os.listdir(self.path):
@@ -29,5 +30,16 @@ class FileProcesses:
             if os.path.isfile(file_path):
                 os.unlink(file_path)
 
-    def search_and_append(self):
-        return self.path
+    def replace_all(self, line, dic):
+        for i, j in dic.iteritems():
+            line = line.replace(i, j)
+        return line
+
+    def search_and_append(self, data, keywords, character):
+        # convert string to hash key old keyword value keyword appended with character
+        keyword_dict = dict((keyword, keyword + character) for keyword in keywords.split('\n'))
+        # iterate over the list so we can process one by one the lines
+        new_string_list = []
+        for line in data:
+            new_string_list.append(self.replace_all(line, keyword_dict))
+        return new_string_list

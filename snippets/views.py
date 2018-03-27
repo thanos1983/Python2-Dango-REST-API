@@ -101,12 +101,12 @@ class FileUploadView(views.APIView):
 
         if serializer.is_valid():
             # Retrieve latest keywords inserted by user
-            db_dictionary = Keyword.objects.filter(owner=request.user).values('keywords').last()
+            db_keywords = Keyword.objects.filter(owner=self.request.user).values('keywords').last()
             # If there are no keywords in data base raise 406 to the user and inform him
-            if not bool(db_dictionary):
+            if not bool(db_keywords):
                 raise NotAcceptable("There are no keywords in database. Please upload a 'keywords.txt' file.")
             # check filename in case of keywords store keywords
-            file_name = request.data.get('file')
+            file_name = self.request.data.get('file')
             file_name.name = file_name.name.lower()
             if file_name.name == 'keywords.txt':
                 raise NotAcceptable("For file upload with file name 'keywords.txt' use url '<host>:<ip>/keywords/'")
@@ -117,13 +117,16 @@ class FileUploadView(views.APIView):
                 if 'character' in request.data:
                     character = request.data.get('character ')
                 else:
+                    # retrieve character from last INSERT in DB, save creates the INSERT
                     character = Snippet.objects.filter(owner=self.request.user).values('character').last()
-                print(self.queryset)
                 # instantiate the class the pass the request to be used by all methods
-                file_obj = FileProcesses(request)
+                file_obj = FileProcesses(self.request)
                 # retrieve the data from the file
                 list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
-                information = '\n'.join(list_of_data)
+                final_data = file_obj.search_and_append(list_of_data,
+                                                        db_keywords['keywords'],
+                                                        character['character'])
+                information = '\n'.join(final_data)
                 serializer.save(owner=self.request.user,
                                 code=information, )
             # empty the dir of the data files
