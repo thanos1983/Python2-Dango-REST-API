@@ -115,7 +115,7 @@ class FileUploadView(views.APIView):
                 serializer.save(owner=self.request.user, )
                 # retrieve character from request or DB
                 if 'character' in request.data:
-                    character = request.data.get('character ')
+                    character = request.data.get('character ')  # TODO check this case if it is working with dictionary
                 else:
                     # retrieve character from last INSERT in DB, save creates the INSERT
                     character = Snippet.objects.filter(owner=self.request.user).values('character').last()
