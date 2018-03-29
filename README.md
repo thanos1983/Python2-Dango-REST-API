@@ -1,7 +1,7 @@
 # Python2-Dango-REST-API
 Minor API test implementation using Django REST Framework
 
-Sample of usefull commands to test the fuctionality of the API with curl.
+Sample of useful commands to test the functionality of the API with curl.
 
 GET
 
