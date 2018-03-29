@@ -150,13 +150,23 @@ class SnippetList(mixins.ListModelMixin,
                                           context={'request': request})
         if serializer.is_valid():
             # retrieve latest keywords inserted by user
-            db_dictionary = Keyword.objects.filter(owner=request.user).values('keywords').last()
+            db_keywords = Keyword.objects.filter(owner=request.user).values('keywords').last()
             # get character from request
             character = request.data.get('character')
+            # retrieve code from GUI
+            code = request.data.get('code')
+            # strip new line characters from lines and split them into a list
+            code_list = code.splitlines()
+            # instantiate the class the pass the request to be used by all methods
+            file_obj = FileProcesses(self.request)
+            final_data = file_obj.search_and_append(code_list,
+                                                    db_keywords['keywords'],
+                                                    character)
+            information = '\n'.join(final_data)
             # if keywords found in database save and proceed
-            if bool(db_dictionary):
+            if bool(db_keywords):
                 serializer.save(owner=request.user,
-                                code=u"print('TEST')", )
+                                code=information)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
