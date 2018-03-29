@@ -94,13 +94,6 @@ class FileUploadViewKeywords(views.APIView):
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
 
-    def get(self, request, format=None):
-        snippets = Snippet.objects.all()
-        serializer = SnippetSerializer(snippets,
-                                       many=True,
-                                       context={'request': request})
-        return Response(serializer.data)
-
     def post(self, request, format=None):
         serializer = SnippetSerializer(data=self.request.data,
                                        context={'request': request})
