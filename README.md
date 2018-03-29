@@ -19,6 +19,10 @@ or
 
 curl http://127.0.0.1:8000/keywords/ | jq '.' # keywords file(s)
 
+or
+
+curl http://127.0.0.1:8000/upload/ | jq '.' # uploaded file(s)
+
 or 
 
 curl -u admin:password123 http://127.0.0.1:8000/keywords/1/ | jq '.' # GET specific input from user admin 
