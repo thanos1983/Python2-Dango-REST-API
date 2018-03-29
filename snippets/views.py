@@ -93,7 +93,13 @@ class FileUploadViewKeywords(views.APIView):
 # class to be called when user is sending POST requests through url <ip>:<port>/upload/
 class FileUploadView(views.APIView):
     parser_classes = (MultiPartParser, FormParser)
-    queryset = Snippet.objects.all()
+
+    def get(self, request, format=None):
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets,
+                                       many=True,
+                                       context={'request': request})
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = SnippetSerializer(data=self.request.data,
