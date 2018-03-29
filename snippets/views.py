@@ -150,12 +150,13 @@ class SnippetList(mixins.ListModelMixin,
                                           context={'request': request})
         if serializer.is_valid():
             # retrieve latest keywords inserted by user
-            db_dictionary = Snippet.objects.filter(owner=request.user).values('keywords').last()
+            db_dictionary = Keyword.objects.filter(owner=request.user).values('keywords').last()
+            # get character from request
+            character = request.data.get('character')
             # if keywords found in database save and proceed
             if bool(db_dictionary):
                 serializer.save(owner=request.user,
-                                code=u"print('TEST')",
-                                keywords=db_dictionary['keywords'])
+                                code=u"print('TEST')", )
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
