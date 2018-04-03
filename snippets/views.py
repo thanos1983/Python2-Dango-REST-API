@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from django.contrib.auth.models import User
+from django.http import Http404
 from rest_framework import generics, status
 from rest_framework import mixins, views
 from rest_framework import permissions
@@ -139,8 +140,8 @@ class SnippetList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializerGui
+    queryset = Snippet.objects.all()  # retrieve objects from model Snippet
+    serializer_class = SnippetSerializerGui  # instantiate class from Serializers
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -178,8 +179,8 @@ class KeywordDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
+    queryset = Keyword.objects.all()  # retrieve objects from model Snippet
+    serializer_class = KeywordSerializer  # instantiate class from Serializers
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -195,14 +196,37 @@ class SnippetDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly)
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializerGui
+    queryset = Snippet.objects.all()  # retrieve objects from model Snippet
+    serializer_class = SnippetSerializerGui  # instantiate class from Serializers
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        serializer = SnippetSerializerGui(data=request.data,
+                                          context={'request': request})
+        if serializer.is_valid():
+            # retrieve latest keywords inserted by user
+            db_keywords = Keyword.objects.filter(owner=request.user).values('keywords').last()
+            # get character from request
+            character = request.data.get('character')
+            # retrieve code from GUI
+            code = request.data.get('code')
+            # strip new line characters from lines and split them into a list
+            code_list = code.splitlines()
+            # instantiate the class the pass the request to be used by all methods
+            file_obj = FileProcesses(self.request)
+            final_data = file_obj.search_and_append(code_list,
+                                                    db_keywords['keywords'],
+                                                    character)
+            information = '\n'.join(final_data)
+            # if keywords found in database save and proceed
+            if bool(db_keywords):
+                serializer.save(owner=request.user,
+                                code=information)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            raise NotAcceptable("There are no keywords in database. Please upload a keywords.txt file...")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
