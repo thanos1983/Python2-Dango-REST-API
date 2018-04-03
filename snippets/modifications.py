@@ -1,6 +1,4 @@
 import os
-import re
-
 import snippets.models
 
 
@@ -43,8 +41,11 @@ class FileProcesses:
         # iterate over the list so we can process one by one the lines
         new_string_list = []
         for line in data:
+            # create dictionary from models character tuple
             ch_dict = dict(snippets.models.CHARACTER_CHOICES)
+            # extract keys from dictionary
             keys = ch_dict.keys()
+            # remove old keys (characters) from line if exist
             line = ''.join(c for c in line if c not in keys)
             new_string_list.append(self.replace_all(line, keyword_dict))
         return new_string_list
