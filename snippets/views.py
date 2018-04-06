@@ -118,14 +118,15 @@ class FileUploadView(views.APIView):
                     character = request.data.get('character')  # TODO add character on model. Not important
                 else:
                     # retrieve character from last INSERT in DB, save creates the INSERT
-                    character = Snippet.objects.filter(owner=self.request.user).values('character').last()
+                    db_character = Snippet.objects.filter(owner=self.request.user).values('character').last()
+                    character = db_character['character']
                 # instantiate the class the pass the request to be used by all methods
                 file_obj = FileProcesses(self.request)
                 # retrieve the data from the file
                 list_of_data = file_obj.file_processing(settings.MEDIA_ROOT)
                 final_data = file_obj.search_and_append(list_of_data,
                                                         db_keywords['keywords'],
-                                                        character['character'])
+                                                        character)
                 information = '\n'.join(final_data)
                 serializer.save(owner=self.request.user,
                                 code=information, )
@@ -215,7 +216,12 @@ class SnippetDetail(mixins.RetrieveModelMixin,
             # retrieve latest keywords inserted by user
             db_keywords = Keyword.objects.filter(owner=request.user).values('keywords').last()
             # get character from request
-            character = request.data.get('character')
+            if 'character' in request.data:
+                character = request.data.get('character')  # TODO add character on model. Not important
+            else:
+                # retrieve character from last INSERT in DB, save creates the INSERT
+                db_character = Snippet.objects.filter(owner=self.request.user).values('character').last()
+                character = db_character['character']
             # retrieve code from GUI
             code = request.data.get('code')
             # strip new line characters from lines and split them into a list
