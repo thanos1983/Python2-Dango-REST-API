@@ -51,7 +51,7 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
-# class to be called when user is sending POST requests through url <ip>:<port>/upload/
+# class to be called when user is sending POST requests through url <ip>:<port>/keywords/
 class FileUploadViewKeywords(views.APIView):
     """
     List all keywords, or create a new input.
@@ -115,7 +115,7 @@ class FileUploadView(views.APIView):
                 serializer.save(owner=self.request.user, )
                 # retrieve character from request or DB
                 if 'character' in request.data:
-                    character = request.data.get('character ')  # TODO add character on model. Not important
+                    character = request.data.get('character')  # TODO add character on model. Not important
                 else:
                     # retrieve character from last INSERT in DB, save creates the INSERT
                     character = Snippet.objects.filter(owner=self.request.user).values('character').last()
@@ -153,7 +153,13 @@ class SnippetList(mixins.ListModelMixin,
             # retrieve latest keywords inserted by user
             db_keywords = Keyword.objects.filter(owner=request.user).values('keywords').last()
             # get character from request
-            character = request.data.get('character')
+            # character = request.data.get('character')
+            if 'character' in request.data:
+                character = request.data.get('character')  # TODO add character on model. Not important
+            else:
+                # retrieve character from last INSERT in DB, save creates the INSERT
+                db_character = Snippet.objects.filter(owner=self.request.user).values('character').last()
+                character = db_character['character']
             # retrieve code from GUI
             code = request.data.get('code')
             # strip new line characters from lines and split them into a list
