@@ -206,11 +206,19 @@ class SnippetDetail(mixins.RetrieveModelMixin,
     queryset = Snippet.objects.all()  # retrieve objects from model Snippet
     serializer_class = SnippetSerializerGui  # instantiate class from Serializers
 
+    def my_get_object(self, pk):
+        try:
+            return Snippet.objects.get(pk=pk)
+        except Snippet.DoesNotExist:
+            raise Http404
+
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        serializer = SnippetSerializerGui(data=request.data,
+    def put(self, request, pk, *args, **kwargs):
+        snippet = self.my_get_object(pk)
+        serializer = SnippetSerializerGui(snippet,
+                                          data=request.data,
                                           context={'request': request})
         if serializer.is_valid():
             # retrieve latest keywords inserted by user
